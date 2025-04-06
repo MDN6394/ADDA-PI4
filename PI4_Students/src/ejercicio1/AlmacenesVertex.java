@@ -1,6 +1,7 @@
 package ejercicio1;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -14,7 +15,14 @@ public interface AlmacenesVertex extends VirtualVertex<AlmacenesVertex,Almacenes
 	Double accionReal();
 	
 	public static AlmacenesVertex start() {
-		return new AlmacenesVertexI(0, new ArrayList<>(), new ArrayList<>());
+		List<Set<Integer>> stored = new ArrayList<>();
+		List<Integer> remainSpace = new ArrayList<>();
+		for(int i = 0; i < DatosAlmacenes.getNumAlmacenes(); i++) {
+			stored.add(new HashSet<>());
+			remainSpace.add(0);
+			
+		}
+		return new AlmacenesVertexI(0, stored, remainSpace);
 	}
 
 }
