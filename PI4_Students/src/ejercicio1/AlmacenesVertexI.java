@@ -1,6 +1,7 @@
 package ejercicio1;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,7 +33,6 @@ public record AlmacenesVertexI(Integer index, List<Set<Integer>> storedProducts,
 	public Boolean isValid() {
 		Boolean indexB = this.index() >= 0 && this.index() <= DatosAlmacenes.getNumProductos();
 		Boolean capacity = true;
-		Boolean incompatibility = true;
 		for(int i = 0; i < remainSpace.size(); i ++) {
 			if(remainSpace.get(i) > DatosAlmacenes.getMetrosCubicosAlmacen(i)) {
 				capacity = false;
@@ -54,19 +54,18 @@ public record AlmacenesVertexI(Integer index, List<Set<Integer>> storedProducts,
 		Set<Integer> incompatible = DatosAlmacenes.getProducto(this.index).incompatibilidades().stream()
 													.map(p -> parse(p)).collect(Collectors.toSet());
 		if(this.index < DatosAlmacenes.getNumProductos()) {
-			if(this.index == DatosAlmacenes.getNumProductos() - 1) {
-				
-			}
 				List<Integer> pActions = new ArrayList<>();
 				
 				for(int i = 0; i < this.remainSpace.size(); i++) {
-					if(remainSpace.get(i) + DatosAlmacenes.getMetrosCubicosProducto(this.index) < DatosAlmacenes.getMetrosCubicosAlmacen(i) && 
-								!(this.storedProducts.get(i).stream().anyMatch(p -> incompatible.contains(p)))) {
+					Integer space = remainSpace.get(i);
+					Integer SpaceProduct = DatosAlmacenes.getMetrosCubicosProducto(this.index);
+					Integer almacen =  DatosAlmacenes.getMetrosCubicosAlmacen(i);
+					Boolean com = !(this.storedProducts.get(i).stream().anyMatch(p -> incompatible.contains(p)));
+					if(space + SpaceProduct <= almacen && com) {
 							pActions.add(i);
 					}
 				}
 				pActions.add(DatosAlmacenes.getNumAlmacenes());
-				System.out.println("For vertex "+ this.index() +" this actions: "+ pActions); 
 				
 				return pActions;
 		} else {
@@ -76,14 +75,18 @@ public record AlmacenesVertexI(Integer index, List<Set<Integer>> storedProducts,
 
 	@Override
 	public AlmacenesVertex neighbor(Integer a) {
-		if(a == DatosAlmacenes.getNumAlmacenes()) {
+		if(a == DatosAlmacenes.getNumAlmacenes()) { 
 			return AlmacenesVertexI.of(this.index + 1, this.storedProducts, this.remainSpace);
+		} else {
+		List<Set<Integer>> newStoredProducts = new ArrayList<>();
+		for(int i = 0; i < this.storedProducts.size(); i++) {
+			Set<Integer> copy = new HashSet<>(this.storedProducts().get(i));
+			newStoredProducts.add(copy);
 		}
-		List<Set<Integer>> newStoredProducts = new ArrayList<>(this.storedProducts);
 		newStoredProducts.get(a).add(this.index);
 		List<Integer> newRemainSpace = new ArrayList<>(this.remainSpace);
-		newRemainSpace.set(a, newRemainSpace.get(a) + DatosAlmacenes.getMetrosCubicosProducto(this.index));
-		return AlmacenesVertexI.of(this.index + 1, newStoredProducts, newRemainSpace);
+		newRemainSpace.set(a, this.remainSpace.get(a) + DatosAlmacenes.getMetrosCubicosProducto(this.index));
+		return AlmacenesVertexI.of(this.index + 1, newStoredProducts, newRemainSpace); }
 	}
 
 	@Override

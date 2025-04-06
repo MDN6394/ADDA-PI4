@@ -31,7 +31,7 @@ public class SolucionAlmacen {
 		
 		for(int i = 0; i < ls.size(); i++) {
 			Integer warehouse = ls.get(i);
-			if(warehouse != null && warehouse >= 0) {
+			if(warehouse != null && warehouse >= 0 && warehouse < DatosAlmacenes.getNumAlmacenes()) {
 				Producto product = DatosAlmacenes.getProducto(i);
 				this.solucion.put(product, warehouse); //Dictionary for products and warehouses
 			}
