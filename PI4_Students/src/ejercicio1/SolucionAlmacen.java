@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.jgrapht.GraphPath;
+
 import ejercicio1.DatosAlmacenes.Producto;
+import us.lsi.common.List2;
 
 public class SolucionAlmacen {
 	
@@ -39,6 +42,19 @@ public class SolucionAlmacen {
 		this.numproductos = this.solucion.size();
 	}
 	
+	public static SolucionAlmacen of(GraphPath<AlmacenesVertex, AlmacenesEdge> path) {
+		return SolucionAlmacen.ofEdges(path.getEdgeList());
+	}
+	
+	public static SolucionAlmacen ofEdges(List<AlmacenesEdge> ls) {
+		List<Integer> alternativas = List2.empty();
+		for(AlmacenesEdge alternativa: ls ) {
+			alternativas.add(alternativa.action());
+		}
+		SolucionAlmacen s = SolucionAlmacen.create(alternativas);
+		return s;
+	}
+
 	@Override
 	public String toString() {
 		return solucion.entrySet().stream()

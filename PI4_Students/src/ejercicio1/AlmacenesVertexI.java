@@ -65,7 +65,9 @@ public record AlmacenesVertexI(Integer index, List<Set<Integer>> storedProducts,
 							pActions.add(i);
 					}
 				}
-				pActions.add(DatosAlmacenes.getNumAlmacenes());
+				
+				pActions.add(-1);
+				
 				
 				return pActions;
 		} else {
@@ -75,7 +77,7 @@ public record AlmacenesVertexI(Integer index, List<Set<Integer>> storedProducts,
 
 	@Override
 	public AlmacenesVertex neighbor(Integer a) {
-		if(a == DatosAlmacenes.getNumAlmacenes()) { 
+		if(a == -1) { 
 			return AlmacenesVertexI.of(this.index + 1, this.storedProducts, this.remainSpace);
 		} else {
 		List<Set<Integer>> newStoredProducts = new ArrayList<>();
@@ -95,25 +97,6 @@ public record AlmacenesVertexI(Integer index, List<Set<Integer>> storedProducts,
 		return AlmacenesEdge.of(this, this.neighbor(a), a);
 	}
 	
-	public Double heuristic() {
-		int possible = 0;
-		for(int i = this.index; i < DatosAlmacenes.getNumProductos(); i++) {
-			int volumeProd = DatosAlmacenes.getMetrosCubicosProducto(i);
-			final int product = i;
-			
-			for(int j = 0; j < this.remainSpace.size(); j++) {
-				if(this.remainSpace.get(j) >= volumeProd) {
-					Boolean compatible = storedProducts.get(j).stream().noneMatch(k->DatosAlmacenes.sonIncompatibles(k, product)
-							|| DatosAlmacenes.sonIncompatibles(product, k));
-					if(compatible) {
-						possible++;
-					}
-				}
-			}
-		}
-		return (double) possible;
-	}
-
 	@Override
 	public Double accionReal() {
 		// TODO Auto-generated method stub

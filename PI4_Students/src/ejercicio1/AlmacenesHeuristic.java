@@ -23,6 +23,8 @@ public class AlmacenesHeuristic {
 			}
 		}
 		return (double) possible;
-	}
+		
+		
+	} 
 
 }

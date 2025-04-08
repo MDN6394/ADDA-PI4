@@ -1,5 +1,6 @@
 package ejercicio2;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,6 +18,22 @@ public class SolucionCursos {
 
     private SolucionCursos(List<Integer> ls) {
         //TODO
+    	 numCursos = 0;
+         solucion = new HashMap<Integer, Integer>(); 
+         puntuacionTotal = 0.0; 
+         costeTotal = 0; 
+         for(int i=0; i<ls.size();i++) {
+      	   
+      	   if(ls.get(i)==1) {
+      		   numCursos+=1;
+      		   solucion.put(DatosCursos.getCurso(i).id(), 1);
+      		   costeTotal+= DatosCursos.getCoste(i);
+      		   puntuacionTotal+=DatosCursos.getRelevancia(i);
+      		   
+      	   } 
+      	   
+         }
+    
     }
 
     @Override
