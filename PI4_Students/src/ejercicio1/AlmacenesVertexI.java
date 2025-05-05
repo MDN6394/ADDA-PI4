@@ -30,20 +30,6 @@ public record AlmacenesVertexI(Integer index, List<Set<Integer>> storedProducts,
 		return String.format("(%d,%d,%d)", this.index, this.storedProducts, this.remainSpace);
 	}
 	
-	public Boolean isValid() {
-		Boolean indexB = this.index() >= 0 && this.index() <= DatosAlmacenes.getNumProductos();
-		Boolean capacity = true;
-		for(int i = 0; i < remainSpace.size(); i ++) {
-			if(remainSpace.get(i) > DatosAlmacenes.getMetrosCubicosAlmacen(i)) {
-				capacity = false;
-			} 
-		}
-		for(int j = 0; j < this.storedProducts.size(); j++) {
-			
-		}
-		return indexB && capacity;
-	}
-	
 	private Integer parse(String p) {
 		String r = p.replace("P", "");
 		return Integer.valueOf(r);
@@ -56,7 +42,7 @@ public record AlmacenesVertexI(Integer index, List<Set<Integer>> storedProducts,
 		if(this.index < DatosAlmacenes.getNumProductos()) {
 				List<Integer> pActions = new ArrayList<>();
 				
-				for(int i = 0; i < this.remainSpace.size(); i++) {
+				for(int i = 0; i < DatosAlmacenes.getNumAlmacenes(); i++) {
 					Integer space = remainSpace.get(i);
 					Integer SpaceProduct = DatosAlmacenes.getMetrosCubicosProducto(this.index);
 					Integer almacen =  DatosAlmacenes.getMetrosCubicosAlmacen(i);
