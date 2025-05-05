@@ -1,6 +1,8 @@
 package ejercicio3;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import us.lsi.common.Files2;
@@ -94,6 +96,15 @@ public class DatosFestival {
         return DatosFestival.getTipoEntrada(i).cuotaMinima();
     }
     
+    public static List<Integer> indOrd(Integer i) {
+    	List<Integer> result = new ArrayList<>();
+    	
+    	for(int j = 0; j < getNumAreas(); j++) {
+    		result.add(j);
+    	}
+    	return result.stream().sorted(Comparator.comparing(a -> getCosteAsignacion(i,a))).toList();
+    }
+    
     public static void toConsole() {
         String2.toConsole(areas, "Áreas");
         String2.toConsole(tiposEntrada, "Tipos de Entrada");
@@ -102,5 +113,8 @@ public class DatosFestival {
 
     public static void main(String[] args) throws IOException {
         iniDatos("resources/ejercicio3/DatosEntrada1.txt");
+        for(int i = 0; i < getNumTiposEntrada(); i++) {
+        	System.out.println(indOrd(i));
+        }
     }
 }

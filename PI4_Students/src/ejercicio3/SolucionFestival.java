@@ -16,7 +16,19 @@ public class SolucionFestival {
     private Integer unidadesTotales;
 
     private SolucionFestival(List<Integer> ls) {
-    	//TODO
+    	solucion = new HashMap<>();
+    	costeTotal = 0.0;
+    	unidadesTotales = 0;
+    	
+    	for(int i = 0;i<ls.size();i++) {
+			Integer aforoAreaTipo = ls.get(i);
+			Integer currentType = i / DatosFestival.getNumAreas();
+			Integer currentAreaPrima = i % DatosFestival.getNumAreas();
+			Integer currentArea = DatosFestival.indOrd(currentType).get(currentAreaPrima);
+    		costeTotal += ls.get(i)*DatosFestival.getCosteAsignacion(currentType, currentArea);
+    		unidadesTotales += aforoAreaTipo;
+    		solucion.put(i, aforoAreaTipo);
+    	}
     }
 
     @Override
@@ -28,7 +40,8 @@ public class SolucionFestival {
 
         for (Map.Entry<Integer, Integer> entry : solucion.entrySet()) {
             Integer tipoEntrada = entry.getKey() / DatosFestival.getNumAreas();
-            Integer area = entry.getKey() % DatosFestival.getNumAreas();
+            Integer areaPrima = entry.getKey() % DatosFestival.getNumAreas();
+            Integer area = DatosFestival.indOrd(tipoEntrada).get(areaPrima);
             Integer unidades = entry.getValue();
 
             if (unidades > 0) {
