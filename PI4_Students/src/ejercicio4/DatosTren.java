@@ -27,7 +27,7 @@ public class DatosTren {
 	 
  private static SimpleWeightedGraph<Estacion, Tramo> graph = Graphs2.simpleWeightedGraph(); 
 	 
-	 public static void iniData (String file) {
+	 public static void iniDatos (String file) {
 			SimpleWeightedGraph<Estacion, Tramo> g = GraphsReader.newGraph(
 					file,
 					Estacion::ofFormat,
@@ -38,6 +38,8 @@ public class DatosTren {
 			stations = g.vertexSet().stream().toList();
 			sections = g.edgeSet().stream().toList();
 			graph = g;
+			
+			toConsole();
 	    }
 	 
 	 public static SimpleWeightedGraph<Estacion, Tramo> getGraph() {

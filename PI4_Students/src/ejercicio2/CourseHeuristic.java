@@ -3,7 +3,7 @@ package ejercicio2;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.IntStream;
+
 
 import us.lsi.common.List2;
 
