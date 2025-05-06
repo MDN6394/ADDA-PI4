@@ -26,7 +26,7 @@ public class SolucionEstaciones {
     		
     		camino.add(DatosTren.getStation(ls.get(i)));
     		try {
-    		tiempoTotal+= DatosTren.getAverageTimeSection( i-1, i);
+    		tiempoTotal+= DatosTren.getAverageTimeSection( ls.get(i-1), ls.get(i));
     		} catch(Exception e) {
     			tiempoTotal+=0;
     		}

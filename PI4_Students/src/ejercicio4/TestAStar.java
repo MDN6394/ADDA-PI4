@@ -40,8 +40,6 @@ public class TestAStar {
 			
 			System.out.println(s_as);
 			System.out.println(gp_as);
-			System.out.println("Last vertex: " + gp.getEndVertex());
-			System.out.println("Neighbors of last vertex: " + graph.edgesListOf(gp.getEndVertex()));
 			System.out.println("========================================================================================================");
 		
 		

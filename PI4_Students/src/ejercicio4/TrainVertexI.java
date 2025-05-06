@@ -14,7 +14,9 @@ public record TrainVertexI(Integer index, List<Integer> path, Double acumCost) i
 	}
 	
 	public Boolean goal() {
-		return this.index().equals(DatosTren.getNumStations());
+		return this.index().equals(DatosTren.getNumStations()-1);
+	
+		
 	}
 	
 	public Boolean goalHasSolution() {
@@ -28,10 +30,9 @@ public record TrainVertexI(Integer index, List<Integer> path, Double acumCost) i
 		} else if (!twoConsecutiveStationSatifactionSeven(this.path())) {
 			return false;
 		} 
-		
-		/*if (!this.path().containsAll(allSations)) {
+		if (!this.path().containsAll(allSations)) {
 			return false;
-		}*/
+		}
 		return true;
 	}
 
@@ -57,9 +58,7 @@ public record TrainVertexI(Integer index, List<Integer> path, Double acumCost) i
 	@Override
 	public List<Integer> actions() {
 		List<Integer> result = new ArrayList<>();
-		if(this.index() == DatosTren.getNumStations() - 1) {
-			return List2.empty();
-		} else if (this.index() == DatosTren.getNumStations() - 2) {
+		if (this.index() == DatosTren.getNumStations() - 1) {
 			Estacion first = DatosTren.getStation(this.path().getFirst());
 			Estacion last = DatosTren.getStation(this.path().getLast());
 			if(DatosTren.getGraph().containsEdge(last, first)) {
@@ -67,7 +66,7 @@ public record TrainVertexI(Integer index, List<Integer> path, Double acumCost) i
 			}
 		} else {
 			for(int e = 0; e < DatosTren.getStations().size(); e++) {
-				if(DatosTren.areConnected(this.path().getLast(), e ) && !this.path().contains(e)) {
+				if(DatosTren.areConnected(this.path().getLast(), e )) {
 					result.add(e);
 				}
 
