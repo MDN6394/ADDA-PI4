@@ -22,14 +22,6 @@ public record AlmacenesVertexI(Integer index, List<Set<Integer>> storedProducts,
 		return true;
 	}
 	
-	public String toGraph() {
-		return String.format("(%d,%d,%d)", this.index, this.storedProducts, this.remainSpace);
-	}
-	
-	public String toString() {
-		return String.format("(%d,%d,%d)", this.index, this.storedProducts, this.remainSpace);
-	}
-	
 	private Integer parse(String p) {
 		String r = p.replace("P", "");
 		return Integer.valueOf(r);
@@ -83,11 +75,7 @@ public record AlmacenesVertexI(Integer index, List<Set<Integer>> storedProducts,
 		return AlmacenesEdge.of(this, this.neighbor(a), a);
 	}
 	
-	@Override
-	public Double accionReal() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 
 }

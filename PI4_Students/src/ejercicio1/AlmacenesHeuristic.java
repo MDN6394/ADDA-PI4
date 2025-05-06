@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 public class AlmacenesHeuristic {
 	
 	public static Double heuristic(AlmacenesVertex v1, Predicate<AlmacenesVertex> goal, AlmacenesVertex v2) {
-		int possible = 0;
+		/*int possible = 0;
 		for(int i = v1.index(); i < DatosAlmacenes.getNumProductos(); i++) {
 			int volumeProd = DatosAlmacenes.getMetrosCubicosProducto(i);
 			final int product = i;
@@ -22,8 +22,9 @@ public class AlmacenesHeuristic {
 				}
 			}
 		}
-		return (double) possible;
+		return (double) possible;*/
 		
+		return 100.0;
 		
 	} 
 

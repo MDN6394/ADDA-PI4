@@ -12,7 +12,6 @@ public interface AlmacenesVertex extends VirtualVertex<AlmacenesVertex,Almacenes
 	Integer index();
 	List<Set<Integer>> storedProducts();
 	List<Integer> remainSpace();
-	Double accionReal();
 	
 	public static AlmacenesVertex start() {
 		List<Set<Integer>> stored = new ArrayList<>();
