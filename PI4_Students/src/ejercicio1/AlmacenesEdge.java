@@ -7,7 +7,11 @@ public record AlmacenesEdge(AlmacenesVertex source,AlmacenesVertex target,Intege
 	implements SimpleEdgeAction<AlmacenesVertex,Integer>{
 	
 	public static AlmacenesEdge of(AlmacenesVertex c1, AlmacenesVertex c2, Integer action) {
-		AlmacenesEdge a = new AlmacenesEdge(c1, c2, action, action * 1.0);
+		Double weight = 0.0;
+		if(action > -1) {
+			weight = 1.0;
+		}
+		AlmacenesEdge a = new AlmacenesEdge(c1, c2, action, weight);
 		return a;
 	}
 

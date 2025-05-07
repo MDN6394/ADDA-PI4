@@ -19,6 +19,13 @@ public record AlmacenesVertexI(Integer index, List<Set<Integer>> storedProducts,
 	}
 	
 	public Boolean goalHasSolution() {
+		/* for(Set<Integer> s : this.storedProducts()) {
+			for(Integer i: s) {
+				if(s.stream().anyMatch(p -> DatosAlmacenes.sonIncompatibles(i, p) || DatosAlmacenes.sonIncompatibles(p, i))) {
+					return false;
+				}
+			}
+		} */
 		return true;
 	}
 	
@@ -26,11 +33,16 @@ public record AlmacenesVertexI(Integer index, List<Set<Integer>> storedProducts,
 		String r = p.replace("P", "");
 		return Integer.valueOf(r);
 	}
+	
+	private Set<Integer> getIncompatibles(Integer i){
+		Set<Integer> incompatible = DatosAlmacenes.getProducto(i).incompatibilidades().stream()
+				.map(p -> parse(p)).collect(Collectors.toSet());
+		
+		return incompatible;
+	}
 
 	@Override
 	public List<Integer> actions() {
-		Set<Integer> incompatible = DatosAlmacenes.getProducto(this.index).incompatibilidades().stream()
-													.map(p -> parse(p)).collect(Collectors.toSet());
 		if(this.index < DatosAlmacenes.getNumProductos()) {
 				List<Integer> pActions = new ArrayList<>();
 				
@@ -38,7 +50,7 @@ public record AlmacenesVertexI(Integer index, List<Set<Integer>> storedProducts,
 					Integer space = remainSpace.get(i);
 					Integer SpaceProduct = DatosAlmacenes.getMetrosCubicosProducto(this.index);
 					Integer almacen =  DatosAlmacenes.getMetrosCubicosAlmacen(i);
-					Boolean com = !(this.storedProducts.get(i).stream().anyMatch(p -> incompatible.contains(p)));
+					Boolean com = this.storedProducts.get(i).stream().noneMatch(p -> getIncompatibles(this.index()).contains(p) || getIncompatibles(p).contains(this.index()));
 					if(space + SpaceProduct <= almacen && com) {
 							pActions.add(i);
 					}
@@ -54,7 +66,7 @@ public record AlmacenesVertexI(Integer index, List<Set<Integer>> storedProducts,
 	}
 
 	@Override
-	public AlmacenesVertex neighbor(Integer a) {
+	public AlmacenesVertexI neighbor(Integer a) {
 		if(a == -1) { 
 			return AlmacenesVertexI.of(this.index + 1, this.storedProducts, this.remainSpace);
 		} else {

@@ -1,6 +1,7 @@
 package ejercicio1;
 
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 
 
@@ -24,7 +25,9 @@ public class AlmacenesHeuristic {
 		}
 		return (double) possible;*/
 		
-		return 100.0;
+		return IntStream.range(v1.index(), DatosAlmacenes.getNumProductos())
+                .mapToDouble(i -> 1.0) 
+                .sum();
 		
 	} 
 
