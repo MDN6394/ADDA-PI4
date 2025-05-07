@@ -13,7 +13,7 @@ public interface CourseVertex extends VirtualVertex<CourseVertex, CourseEdge, In
 	Set<Integer> coveredAreas();
 	Integer remainBudget();
 	
-	public static CourseVertex start() {
+	public static CourseVertexI start() {
 		List<Integer> selected = new ArrayList<>();
 		Set<Integer> covered = new HashSet<>();
 		Integer remain = DatosCursos.getPresupuestoTotal();

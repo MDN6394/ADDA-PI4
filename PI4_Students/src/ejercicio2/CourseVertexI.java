@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
 
 import us.lsi.common.List2;
 
@@ -59,7 +58,7 @@ public record CourseVertexI(Integer index, List<Integer> selectedCourses, Set<In
 	private boolean areMoreTechCourses(Integer techCourses) {
 		Boolean moreTechCourses = true;
 		
-		for(int k = 1; k < DatosCursos.getNumCursos(); k ++) {
+		for(int k = 1; k < DatosCursos.getNumAreas(); k ++) {
 			int acc = 0;
 			if(this.index < DatosCursos.getNumCursos()) {
 				if(DatosCursos.getArea(this.index) == k) {
@@ -93,17 +92,18 @@ public record CourseVertexI(Integer index, List<Integer> selectedCourses, Set<In
 	public List<Integer> actions() {
 		
 		Boolean enoughBudget = DatosCursos.getCoste(this.index) <= this.remainBudget;
+		Set<Integer> future = new HashSet<>(this.coveredAreas());
+		future.add(DatosCursos.getArea(this.index()));
+		Boolean allAreas = hasAllAreas(future);
+		int techCourses = numTechCourses();
+		Boolean moreTechCourses = areMoreTechCourses(techCourses);
+		int totalDuration = getTotalDuration();
+		Boolean enoughAvgDuration = (totalDuration + DatosCursos.getDuracion(this.index))/(selectedCourses.size() + 1) >= 20;
 		
 		if(this.index >= DatosCursos.getNumCursos()) {
 			return List2.of();
 		} else if (this.index == DatosCursos.getNumCursos() - 1) {
-			Set<Integer> future = new HashSet<>(this.coveredAreas());
-			future.add(DatosCursos.getArea(this.index()));
-			Boolean allAreas = hasAllAreas(future);
-			int techCourses = numTechCourses();
-			Boolean moreTechCourses = areMoreTechCourses(techCourses);
-			int totalDuration = getTotalDuration();
-			Boolean enoughAvgDuration = (totalDuration + DatosCursos.getDuracion(this.index))/(selectedCourses.size() + 1) >= 20;
+			
 			if(enoughBudget && allAreas && moreTechCourses && enoughAvgDuration) {
 				return List2.of(1);
 			} else if(!(enoughAvgDuration) || !(allAreas) || !(moreTechCourses)) {
@@ -115,14 +115,19 @@ public record CourseVertexI(Integer index, List<Integer> selectedCourses, Set<In
 			if(enoughBudget) {
 			 return List2.of(0,1);
 			} else {
-				return List2.of(0);
+				if(allAreas && moreTechCourses && enoughAvgDuration) {
+					return List2.of(0);
+				} else {
+					return List2.of();
+				}
+				
 			}
 			
 		}
 	}
 
 	@Override
-	public CourseVertex neighbor(Integer a) {
+	public CourseVertexI neighbor(Integer a) {
 		List<Integer> newSelectedCourses = new ArrayList<>(this.selectedCourses);
 		Set<Integer> newCoveredAreas = new HashSet<>(this.coveredAreas);
 		if(a == 0) {

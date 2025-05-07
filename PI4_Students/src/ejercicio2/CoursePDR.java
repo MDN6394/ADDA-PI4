@@ -1,9 +1,17 @@
-package ejercicio1;
+package ejercicio2;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 
-public class AlmacenesPDR {
+
+
+
+public class CoursePDR {
 	
 	public static record partialSolution(Integer action, Double weight) implements Comparable<partialSolution> {
 		
@@ -18,40 +26,25 @@ public class AlmacenesPDR {
 		
 	}
 	
-	private  static Map<AlmacenesVertexI, partialSolution> memory;
+	private  static Map<CourseVertexI, partialSolution> memory;
 	private static Double bestOF;
-	private static  AlmacenesVertexI start;
+	private static CourseVertexI start;
 	
-	public static SolucionAlmacen pd(AlmacenesVertexI initialProblem, Double maxValue) {
+	public static SolucionCursos pd(CourseVertexI initialProblem, Double maxValue) {
 		start = initialProblem;
 		bestOF = maxValue;
 		memory = new HashMap<>();
-		pd(start, 0.0, memory);
-		SolucionAlmacen r = solucion();
+		pd(start,bestOF,memory);
+		SolucionCursos r = solucion();
 		return r;
 		
 	}
 
-	private static SolucionAlmacen solucion() {
-		List<Integer> actions = new ArrayList<>();
-		AlmacenesVertexI v = start;
-		partialSolution s = memory.get(v);
-		if(s == null) {
-			return SolucionAlmacen.empty();
-		}
-		while(s.action() != null) {
-			actions.add(s.action());
-			v = v.neighbor(s.action());
-			s = memory.get(v);
-		}
-		return SolucionAlmacen.create(actions);
-	}
-
-	private static partialSolution pd(AlmacenesVertexI problem, Double acumOF, Map<AlmacenesVertexI, partialSolution> memory2) {
+	private static partialSolution pd(CourseVertexI problem, Double acumOF, Map<CourseVertexI, partialSolution> memory2) {
 		partialSolution ret = null;
-		if(memory.containsKey(problem)) {
-			ret = memory.get(problem);
-		} else if (problem.index() == DatosAlmacenes.getNumProductos()) {
+		if(memory2.containsKey(problem)) {
+			ret = memory2.get(problem);
+		} else if (problem.index() == DatosCursos.getNumCursos()) {
 			ret = partialSolution.of(null, 0.0);
 			memory.put(problem, ret);
 			if(acumOF > bestOF) {
@@ -60,10 +53,8 @@ public class AlmacenesPDR {
 		} else {
 			List<partialSolution> solByActions = new ArrayList<>();
 			for(Integer a: problem.actions()) {
-				Double weight = 0.0;
-				if(a > -1) {
-					weight = 1.0;
-				}
+				Double weight = (double) DatosCursos.getRelevancia(problem.index())*a;
+				
 				partialSolution solA = pd(problem.neighbor(a), acumOF + weight, memory);
 				if(solA != null) {
 					solByActions.add(partialSolution.of(a, solA.weight() + weight));
@@ -76,19 +67,34 @@ public class AlmacenesPDR {
 		}
 		return ret;
 		
+		
 	}
-	
+
+	private static SolucionCursos solucion() {
+		List<Integer> actions = new ArrayList<>();
+		CourseVertexI v = start;
+		partialSolution s = memory.get(v);
+		if(s == null) {
+			return SolucionCursos.create(new ArrayList<>());
+		}
+		while(s.action() != null) {
+			actions.add(s.action());
+			v = v.neighbor(s.action());
+			s = memory.get(v);
+		}
+		return SolucionCursos.create(actions);
+	}
+
 	public static void main(String[] args) {
 		Locale.setDefault(Locale.of("en", "US"));
 		for(int id_fichero = 1; id_fichero <= 3; id_fichero++) {
-			DatosAlmacenes.iniDatos("resources/ejercicio1/DatosEntrada"+id_fichero+".txt");
+			DatosCursos.iniDatos("resources/ejercicio2/DatosEntrada"+id_fichero+".txt");
 			System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
-			AlmacenesVertexI ini = AlmacenesVertex.start();
+			CourseVertexI ini = CourseVertex.start();
 			pd(ini, 0.0);
 			System.out.println(solucion().toString());
 		}
-		
-		
+
 	}
 
 }
