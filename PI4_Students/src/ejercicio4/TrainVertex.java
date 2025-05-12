@@ -10,7 +10,7 @@ public interface TrainVertex extends VirtualVertex<TrainVertex, TrainEdge, Integ
 	List<Integer> path();
 	Double acumCost();
 	
-	public static TrainVertex start() {
+	public static TrainVertexI start() {
 		
 		List<Integer> path = new ArrayList<>();
 		path.add(0);

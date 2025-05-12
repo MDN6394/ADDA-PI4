@@ -10,6 +10,7 @@ public class TicketBT {
 	private TicketState state;
 	private SolucionFestival bestSol;
 	private Double bestOF;
+
 	
 	private TicketBT() {
 		super();
@@ -17,21 +18,22 @@ public class TicketBT {
 	
 	public void btm(TicketVertexI v1) {
 		state = TicketState.of(v1);
-		bestOF = 0.0;
+		bestOF = Double.MAX_VALUE;
 		bestSol = null;
 		btm();
 	}
 	
 	public void btm() {
-		if(this.state.vertex().index() == DatosFestival.getNumTiposEntrada()*DatosFestival.getNumAreas()) {
-			if(this.state.acumOF() > bestOF) {
+		
+		if(this.state.vertex().goal() && this.state.vertex().goalHasSolution()) {
+			if(this.state.acumOF() < bestOF) {
 				bestOF = this.state.acumOF();
 				bestSol = SolucionFestival.create(this.state.actions());
 			}
 		} else {
 			for(Integer a : this.state.vertex().actions()) {
 				if(this.state.acumOF() + this.state.vertex().weight(a) + 
-						TicketHeuristic.heuristic(this.state.vertex().neighbor(a), null, null) < bestOF) {
+						TicketHeuristic.heuristic(this.state.vertex().neighbor(a), null, null) > bestOF) {
 					continue;
 				}
 				state.foward(a);
@@ -49,7 +51,9 @@ public class TicketBT {
 			TicketBT bt = TicketBT.of();
 			bt.btm(TicketVertex.start());
 			System.out.println(bt.bestSol);
+			
 		}
+
 	}
 
 }

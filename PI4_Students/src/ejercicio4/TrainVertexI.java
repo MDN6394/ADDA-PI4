@@ -72,11 +72,12 @@ public record TrainVertexI(Integer index, List<Integer> path, Double acumCost) i
 
 			}
 		}
+		result.removeIf(x -> this.path().contains(x));
 		return result;
 	}
 
 	@Override
-	public TrainVertex neighbor(Integer a) {
+	public TrainVertexI neighbor(Integer a) {
 		List<Integer> newPath = new ArrayList<>(this.path());
 		newPath.add(a);
 		Double newAcumCost = acumCost + DatosTren.getGraph().getEdge(DatosTren.getStation(this.path().getLast()), DatosTren.getStation(a)).costeBillete();
@@ -88,6 +89,11 @@ public record TrainVertexI(Integer index, List<Integer> path, Double acumCost) i
 	@Override
 	public TrainEdge edge(Integer a) {
 		return TrainEdge.of(this, neighbor(a), a);
+	}
+
+	public Double weight(Integer a) {
+		TrainEdge edge = edge(a);
+		return edge.weight();
 	}
 
 }

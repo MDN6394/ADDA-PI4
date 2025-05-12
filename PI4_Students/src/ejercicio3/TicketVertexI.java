@@ -3,7 +3,7 @@ package ejercicio3;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.stream.IntStream;
 
 import us.lsi.common.List2;
 
@@ -36,6 +36,9 @@ public record TicketVertexI(Integer index, List<Integer> ticketType, List<Intege
 		Integer jPrima = this.index%DatosFestival.getNumAreas();
 		Integer j = DatosFestival.indOrd(i).get(jPrima);
 		if(this.index >= DatosFestival.getNumTiposEntrada()*DatosFestival.getNumAreas()-1) {
+			if(!chekRestQuotasMeet()) {
+				return List2.empty();
+			}
 			Integer left = DatosFestival.getCuotaMinima(i) - this.ticketType().get(i);
 			if(left <= DatosFestival.getAforoMaximoArea(j) - this.ticketArea().get(j)) {
 				return List2.of(left);
@@ -48,18 +51,26 @@ public record TicketVertexI(Integer index, List<Integer> ticketType, List<Intege
 		} else if (this.ticketArea().get(j) >= DatosFestival.getAforoMaximoArea(j)) {
 			return List2.of(0);
 		}
-		List<Integer> result = new ArrayList<>();
 		Integer minimumQuoteNeed = DatosFestival.getCuotaMinima(i) - this.ticketType().get(i);
 		Integer spaceRemaining = DatosFestival.getAforoMaximoArea(j) - this.ticketArea().get(j);
 		int end = minimumQuoteNeed;
 		if(spaceRemaining < minimumQuoteNeed) {
 			end = spaceRemaining;
 		}
-		for(int k = 0; k <= end; k++) {
-			result.add(k);
-		}
 		
-		return result;	
+		
+		return IntStream.rangeClosed(0, end).boxed().toList();	
+	}
+
+	private boolean chekRestQuotasMeet() {
+		Integer i = this.index()/DatosFestival.getNumAreas();
+		for(int k = 0; k < this.ticketType().size(); k++) {
+			if(k == i) {continue;}
+			if(this.ticketType().get(k) < DatosFestival.getCuotaMinima(k)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
