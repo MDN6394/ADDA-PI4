@@ -18,8 +18,8 @@ public class TicketBT {
 	
 	public void btm(TicketVertexI v1) {
 		state = TicketState.of(v1);
-		bestOF = Double.MAX_VALUE;
-		bestSol = null;
+		bestOF = TicketHeuristic.voraz(v1).getCosteTotal();
+		bestSol = TicketHeuristic.voraz(v1);
 		btm();
 	}
 	
