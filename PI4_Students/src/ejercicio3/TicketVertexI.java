@@ -63,7 +63,7 @@ public record TicketVertexI(Integer index, List<Integer> ticketType, List<Intege
 	}
 
 	@Override
-	public TicketVertex neighbor(Integer a) {
+	public TicketVertexI neighbor(Integer a) {
 		Integer i = this.index/DatosFestival.getNumAreas();
 		Integer jPrima = this.index%DatosFestival.getNumAreas();
 		Integer j = DatosFestival.indOrd(i).get(jPrima);
@@ -77,6 +77,11 @@ public record TicketVertexI(Integer index, List<Integer> ticketType, List<Intege
 	@Override
 	public TicketEdge edge(Integer a) {
 		return TicketEdge.of(this, this.neighbor(a), a);
+	}
+	
+	public Double weight(Integer a) {
+		TicketEdge edge = edge(a);
+		return edge.weight();
 	}
 
 }

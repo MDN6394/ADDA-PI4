@@ -10,7 +10,7 @@ public interface TicketVertex extends VirtualVertex<TicketVertex, TicketEdge, In
 	List<Integer> ticketType();
 	List<Integer> ticketArea();
 	
-	public static TicketVertex start() {
+	public static TicketVertexI start() {
 		List<Integer> ticketType = new ArrayList<>();
 		while(ticketType.size() < DatosFestival.getNumTiposEntrada()) {
 			ticketType.add(0);
